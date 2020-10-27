@@ -3,8 +3,6 @@ const audioSource = document.getElementById('audioSource')
 const audioOutput = document.getElementById('audioOutput')
 const videoSource = document.getElementById('videoSource')
 
-startBtn.addEventListener('click', start)
-
 function start() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     console.log('getUserMedia is not supported!')
