@@ -3,20 +3,36 @@ const audioSource = document.getElementById('audioSource')
 const audioOutput = document.getElementById('audioOutput')
 const videoSource = document.getElementById('videoSource')
 
-if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-  console.log('getUserMedia is not supported!')
-} else {
-  const constraints = {
-    video: {
-      width: 520,
-      height: 180,
-      frameRate: 30, // 幀速率
-      facingMode: 'environment', // environment 後鏡頭, user 前鏡頭
-    },
-    audio: true,
+startBtn.addEventListener('click', start)
+
+function start() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    console.log('getUserMedia is not supported!')
+    return
+  } else {
+    // 取得裝置 id
+    const deviceId = videoSource.value
+    const constraints = {
+      video: {
+        width: 520,
+        height: 180,
+        // 幀速率
+        frameRate: {
+          ideal: 10, // 理想
+          max: 60, // 最大
+        },
+        facingMode: 'environment', // environment 後鏡頭, user 前鏡頭
+        deviceId: deviceId ? deviceId : undefined, // 更新裝置 id
+      },
+      audio: {
+        noiseSuppression: true, // 降噪
+        echoCancellation: true, // 消除回音
+      },
+    }
+    navigator.mediaDevices.getUserMedia(constraints).then(gotMediaStream).then(gotDevices).catch(handleError)
   }
-  navigator.mediaDevices.getUserMedia(constraints).then(gotMediaStream).then(gotDevices).catch(handleError)
 }
+start()
 
 function gotMediaStream(stream) {
   videoPlay.srcObject = stream
@@ -45,3 +61,6 @@ function gotDevices(deviceInfos) {
     }
   })
 }
+
+// 監聽更改鏡頭
+videoSource.onchange = start
