@@ -2,6 +2,7 @@ const videoPlay = document.getElementById('player')
 const audioSource = document.getElementById('audioSource')
 const audioOutput = document.getElementById('audioOutput')
 const videoSource = document.getElementById('videoSource')
+const filtersSelect = document.getElementById('filter')
 
 function start() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -62,3 +63,7 @@ function gotDevices(deviceInfos) {
 
 // 監聽更改鏡頭
 videoSource.onchange = start
+
+filtersSelect.onchange = function () {
+  videoPlay.className = filtersSelect.value
+}
