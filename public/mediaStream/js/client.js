@@ -7,7 +7,12 @@ if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
   console.log('getUserMedia is not supported!')
 } else {
   const constraints = {
-    video: true,
+    video: {
+      width: 520,
+      height: 180,
+      frameRate: 30, // 幀速率
+      facingMode: 'environment', // environment 後鏡頭, user 前鏡頭
+    },
     audio: true,
   }
   navigator.mediaDevices.getUserMedia(constraints).then(gotMediaStream).then(gotDevices).catch(handleError)
