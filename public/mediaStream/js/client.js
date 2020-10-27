@@ -3,6 +3,8 @@ const audioSource = document.getElementById('audioSource')
 const audioOutput = document.getElementById('audioOutput')
 const videoSource = document.getElementById('videoSource')
 const filtersSelect = document.getElementById('filter')
+const snapshot = document.getElementById('snapshot')
+const picture = document.getElementById('picture')
 
 function start() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -13,8 +15,8 @@ function start() {
     const deviceId = videoSource.value
     const constraints = {
       video: {
-        width: 520,
-        height: 180,
+        width: 320,
+        height: 240,
         // 幀速率
         frameRate: {
           ideal: 10, // 理想
@@ -23,10 +25,7 @@ function start() {
         facingMode: 'environment', // environment 後鏡頭, user 前鏡頭
         deviceId: deviceId ? deviceId : undefined, // 更新裝置 id
       },
-      audio: {
-        noiseSuppression: true, // 降噪
-        echoCancellation: true, // 消除回音
-      },
+      audio: false,
     }
     navigator.mediaDevices.getUserMedia(constraints).then(gotMediaStream).then(gotDevices).catch(handleError)
   }
@@ -66,4 +65,15 @@ videoSource.onchange = start
 
 filtersSelect.onchange = function () {
   videoPlay.className = filtersSelect.value
+}
+
+function pictureInit() {
+  picture.width = 320
+  picture.height = 240
+}
+pictureInit()
+
+snapshot.onclick = function () {
+  picture.className = filtersSelect.value
+  picture.getContext('2d').drawImage(videoPlay, 0, 0, picture.width, picture.height)
 }
