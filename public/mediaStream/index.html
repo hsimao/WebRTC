@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WebRTC capture video and audio</title>
     <style>
+      #videoPlayer,
+      #recPlayer {
+        -webkit-transform: scale(-1, 1);
+        transform: scale(-1, 1);
+      }
+
       .nono {
         filter: none;
         -webkit-filter: none;
@@ -60,9 +66,16 @@
       <table>
         <tr>
           <td><video autoplay playsinline id="videoPlayer"></video></td>
+          <td><video playsinline id="recPlayer"></video></td>
           <td><div id="constraints" class="output"></div></td>
         </tr>
       </table>
+    </section>
+
+    <section>
+      <div><button id="record">Start Record</button></div>
+      <div><button id="recplay" disabled>Play</button></div>
+      <div><button id="download" disabled>Download</button></div>
     </section>
 
     <section>
