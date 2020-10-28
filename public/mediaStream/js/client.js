@@ -117,6 +117,16 @@ btnRecPlay.onclick = () => {
   recPlayer.play()
 }
 
+btnRecDownload.onclick = () => {
+  const blob = new Blob(buffer, { type: 'video/webm' })
+  const url = window.URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.style.display = 'none'
+  a.download = 'aaa.webm' // 下載檔名
+  a.click()
+}
+
 function handleDataAvailable(e) {
   if (e && e.data && e.data.size > 0) {
     buffer.push(e.data)
