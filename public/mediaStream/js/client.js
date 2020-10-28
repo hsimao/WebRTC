@@ -39,7 +39,25 @@ function start() {
     navigator.mediaDevices.getUserMedia(constraints).then(gotMediaStream).then(gotDevices).catch(handleError)
   }
 }
-start()
+// start()
+
+// 錄製螢幕 getDisplayMedia
+function startDisplayMedia() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+    console.log('getDisplayMedia is not supported!')
+    return
+  } else {
+    const constraints = {
+      video: {
+        width: 600,
+        height: 400,
+      },
+      audio: false,
+    }
+    navigator.mediaDevices.getDisplayMedia(constraints).then(gotMediaStream).then(gotDevices).catch(handleError)
+  }
+}
+startDisplayMedia()
 
 function gotMediaStream(stream) {
   videoPlay.srcObject = stream
