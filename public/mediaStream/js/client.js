@@ -1,4 +1,5 @@
-const videoPlay = document.getElementById('player')
+// const videoPlay = document.getElementById('videoPlayer')
+const audioPlay = document.getElementById('audioPlayer')
 const audioSource = document.getElementById('audioSource')
 const audioOutput = document.getElementById('audioOutput')
 const videoSource = document.getElementById('videoSource')
@@ -14,18 +15,19 @@ function start() {
     // 取得裝置 id
     const deviceId = videoSource.value
     const constraints = {
-      video: {
-        width: 320,
-        height: 240,
-        // 幀速率
-        frameRate: {
-          ideal: 10, // 理想
-          max: 60, // 最大
-        },
-        facingMode: 'environment', // environment 後鏡頭, user 前鏡頭
-        deviceId: deviceId ? deviceId : undefined, // 更新裝置 id
-      },
-      audio: false,
+      // video: {
+      //   width: 320,
+      //   height: 240,
+      //   // 幀速率
+      //   frameRate: {
+      //     ideal: 10, // 理想
+      //     max: 60, // 最大
+      //   },
+      //   facingMode: 'environment', // environment 後鏡頭, user 前鏡頭
+      //   deviceId: deviceId ? deviceId : undefined, // 更新裝置 id
+      // },
+      video: false,
+      audio: true,
     }
     navigator.mediaDevices.getUserMedia(constraints).then(gotMediaStream).then(gotDevices).catch(handleError)
   }
@@ -33,7 +35,8 @@ function start() {
 start()
 
 function gotMediaStream(stream) {
-  videoPlay.srcObject = stream
+  // videoPlay.srcObject = stream
+  audioPlay.srcObject = stream
   // 回傳 enumerateDevices Promise, 讓取得成功後可接續使用 .then 操作
   return navigator.mediaDevices.enumerateDevices()
 }
