@@ -1,0 +1,33 @@
+.container {
+  padding: 30px;
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto;
+  justify-content: center;
+  flex-flow: column nowrap;
+}
+
+.row {
+  display: flex;
+  margin: 6px 0;
+}
+
+.row label {
+  min-width: 100px;
+}
+
+.row button {
+  margin-left: 8px;
+}
+
+.row input,
+.row textarea {
+  width: 100%;
+}
+
+#send {
+  margin: 0;
+  padding: 8px 12px;
+  width: 100%;
+  margin-top: 20px;
+}

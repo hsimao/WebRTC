@@ -13,7 +13,7 @@ log4js.configure({
       filename: 'app.log',
       layout: {
         type: 'pattern',
-        pattern: '%r %p - %m',
+        pattern: '%d %p %c %m%n',
       },
     },
   },
@@ -45,40 +45,52 @@ const io = socketIo.listen(httpsServer)
 
 io.sockets.on('connection', (socket) => {
   // 加入房間
-  socket.on('join', (room) => {
+  socket.on('join', (room, username) => {
     socket.join(room)
     const myRoom = io.sockets.adapter.rooms[room]
     if (myRoom) {
       const users = Object.keys(myRoom.sockets).length
 
-      console.log('users', users)
-      logger.log(`the number of user in room is: ${users}`)
+      logger.info(`the number of user in room is: ${users}`)
 
       // 只發送給當前加入的房間用戶
-      // socket.emit('joined', room, socket.id)
+      socket.emit('joined', room, socket.id)
 
       // 發送給當前房間的所有人, 除了自己以外
-      // socket.to(room).emit('joined', room, socket.id)
+      socket.to(room).emit('new_joined_user', username)
 
       // 發送給當前房間的所有人, 包含自己
       // io.in(room).emit('joined', room, socket.id)
 
       // 發送給網站全部的人, 除了自己以外
-      socket.broadcast.emit('joined', room, socket.id)
+      // socket.broadcast.emit('joined', room, socket.id)
     }
   })
 
   // 離開房間
-  socket.on('leave', (room) => {
+  socket.on('leaved', (room, username) => {
     const myRoom = io.sockets.adapter.rooms[room]
     if (myRoom) {
       const users = Object.keys(myRoom.sockets).length
 
       console.log('users', users - 1)
-      logger.log(`the number of user in room is: ${users - 1}`)
+      logger.info(`the number of user in room is: ${users - 1}`)
 
-      socket.leave(room)
-      socket.broadcast.emit('left', room, socket.id)
+      socket.leave(room, () => {
+        socket.emit('leaved', room, socket.id)
+
+        // 發送給當前房間的所有人, 除了自己以外
+        socket.to(room).emit('leaved_user', username)
+      })
+    }
+  })
+
+  socket.on('message', (room, data) => {
+    const myRoom = io.sockets.adapter.rooms[room]
+    if (myRoom) {
+      // socket.emit('message', room, socket.id, data)
+      // 發送給當前房間的所有人, 包含自己
+      io.in(room).emit('message', room, socket.id, data)
     }
   })
 })
